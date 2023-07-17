@@ -18,6 +18,7 @@ async function bootstrap() {
         origin: true,
     })
 
+    // Requests test //
     fastify.get('/count', async () => {
         
       const count = await prisma.results.groupBy({
@@ -36,7 +37,8 @@ async function bootstrap() {
             }
         })
     })
-
+    
+    // Requests test //
     fastify.get('/averige', async () => {
         const averige = await prisma.results.aggregate ({
             where: {
