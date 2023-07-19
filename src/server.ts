@@ -1,12 +1,16 @@
 import Fastify from 'fastify'
 import { PrismaClient } from '@prisma/client'
 import cors from '@fastify/cors'
+import {z} from 'zod'
 
 const prisma = new PrismaClient ({
     log: ['query'],
 })
 
-import {z} from 'zod'
+interface RouteParams {
+    title: string;
+}
+
 
 async function bootstrap() {
 
@@ -55,7 +59,7 @@ async function bootstrap() {
 
     fastify.get('/allresults/:title', async(request) => {
         
-        const { title } = request.params;
+        const { title } = request.params as RouteParams;
         
         const [averige, count] = await Promise.all([
             prisma.results.aggregate({
@@ -86,7 +90,7 @@ async function bootstrap() {
 
         const createResultsBody = z.object({
            title: z.string(),
-           stars: z.number()
+           stars: z.number().gte(1)
         }) 
 
         const {title, stars} = createResultsBody.parse(request.body)
